@@ -1,3 +1,3 @@
-# Pagination (Bacened)
+# Pagination (Backend)
 
 HATEOAS, Hypermedia and pagination
