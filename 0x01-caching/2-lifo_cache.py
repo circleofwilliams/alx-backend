@@ -1,42 +1,28 @@
 #!/usr/bin/python3
-""" LIFO Caching """
-
-from base_caching import BaseCaching
+""" LIFOCache module
+    last in first out:
+"""
+BaseCaching = __import__('base_caching').BaseCaching
 
 
 class LIFOCache(BaseCaching):
-    """ LIFO caching """
-
-    def __init__(self):
-        """ Constructor """
-        super().__init__()
-        self.queue = []
-
+    """ A caching system
+    """
     def put(self, key, item):
-        """ Puts item in cache """
-        if key is None or item is None:
-            return
-
-        self.cache_data[key] = item
-
-        if len(self.cache_data) > BaseCaching.MAX_ITEMS:
-            if self.queue:
-                last = self.queue.pop()
-                del self.cache_data[last]
-                print("DISCARD: {}".format(last))
-
-        if key not in self.queue:
-            self.queue.append(key)
-        else:
-            self.mv_last_list(key)
+        """ Add an item in the cache and check if the the cache is full or not.
+        """
+        if key and item is not None:
+            if (key not in self.cache_data.keys()) and \
+                    (len(self.cache_data) >= BaseCaching.MAX_ITEMS):
+                print(f'DISCARD: {list(self.cache_data)[-1]}')
+                self.cache_data.popitem()
+            self.cache_data[key] = item
+        return
 
     def get(self, key):
-        """ Gets item from cache """
-        return self.cache_data.get(key, None)
-
-    def mv_last_list(self, item):
-        """ Moves element to last idx of list """
-        length = len(self.queue)
-        if self.queue[length - 1] != item:
-            self.queue.remove(item)
-            self.queue.append(item)
+        """ Get an item by key
+        """
+        try:
+            return self.cache_data[key]
+        except Exception:
+            return None 
